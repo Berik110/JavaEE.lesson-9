@@ -7,6 +7,8 @@ import java.sql.ResultSet;
 import java.util.ArrayList;
 
 public class DBManager {
+    String name = "Ilyas";
+    
     private static Connection connection;
 
     static {
