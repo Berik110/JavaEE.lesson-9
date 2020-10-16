@@ -24,12 +24,13 @@ public class DBManager {
         int rows=0;
         try{
             PreparedStatement statement = connection.prepareStatement("" +
-                    "INSERT INTO users (email, password, full_name, picture) " +
-                    "VALUES (?,?,?,?)");
+                    "INSERT INTO users (email, password, full_name, picture, city_id) " +
+                    "VALUES (?,?,?,?,?)");
             statement.setString(1, user.getEmail());
             statement.setString(2, user.getPassword());
             statement.setString(3, user.getFullName());
             statement.setString(4, user.getPicture());
+            statement.setLong(5, user.getCity().getId());
 
             rows = statement.executeUpdate();
             statement.close();
@@ -44,7 +45,11 @@ public class DBManager {
         Users user = null;
         try{
             PreparedStatement statement = connection.prepareStatement("" +
-                    "SELECT * FROM users WHERE email=?");
+                    "SELECT u.id, u.email, u.password, u.full_name, u.picture, u.city_id, c.name AS cityName, c.country_id, co.name AS countryName, co.code " +
+                    "FROM users u " +
+                    "INNER JOIN cities c ON c.id=u.city_id " +
+                    "INNER JOIN countries co ON c.country_id=co.id " +
+                    "WHERE u.email=?");
             statement.setString(1, email);
 
             ResultSet resultSet = statement.executeQuery();
@@ -55,7 +60,16 @@ public class DBManager {
                         resultSet.getString("email"),
                         resultSet.getString("password"),
                         resultSet.getString("full_name"),
-                        resultSet.getString("picture")
+                        resultSet.getString("picture"),
+                        new Cities(
+                                resultSet.getLong("city_id"),
+                                resultSet.getString("cityName"),
+                                new Countries(
+                                        resultSet.getLong("country_id"),
+                                        resultSet.getString("countryName"),
+                                        resultSet.getString("code")
+                                )
+                        )
                 );
             } statement.close();
 
@@ -156,7 +170,8 @@ public class DBManager {
                                         resultSet.getLong("author_id"),
                                         null, null,
                                         resultSet.getString("full_name"),
-                                        resultSet.getString("picture")
+                                        resultSet.getString("picture"),
+                                        null
                                 ),
                                 resultSet.getString("description"),
                                 resultSet.getInt("stars"),
@@ -192,7 +207,8 @@ public class DBManager {
                                 resultSet.getLong("author_id"),
                                null, null,
                                 resultSet.getString("full_name"),
-                                resultSet.getString("picture")
+                                resultSet.getString("picture"),
+                                null
                             ),
                             resultSet.getString("description"),
                             resultSet.getInt("stars"),
@@ -251,7 +267,7 @@ public class DBManager {
                    ),
                    new Users(
                         resultSet.getLong("user_id"),
-                       null,null, resultSet.getString("full_name"), resultSet.getString("picture")
+                       null,null, resultSet.getString("full_name"), resultSet.getString("picture"), null
                    ),
                     resultSet.getString("comment"),
                     resultSet.getTimestamp("added_date")
@@ -263,4 +279,89 @@ public class DBManager {
         }
         return comments;
     }
+
+
+    public static ArrayList<Countries> getAllCountries(){
+        ArrayList<Countries> countries = new ArrayList<>();
+
+        try{
+            PreparedStatement statement = connection.prepareStatement("SELECT * FROM countries");
+            ResultSet resultSet = statement.executeQuery();
+
+            while (resultSet.next()){
+                countries.add(new Countries(
+                        resultSet.getLong("id"),
+                        resultSet.getString("name"),
+                        resultSet.getString("code")
+                ));
+            }
+            statement.close();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return countries;
+    }
+
+
+    public static ArrayList<Cities> getCitiesByCountryId(Long id){
+        ArrayList<Cities> cities = new ArrayList<>();
+
+        try{
+            PreparedStatement statement = connection.prepareStatement("" +
+                    "SELECT c.id, c.name, c.country_id, co.name AS countryName, co.code " +
+                    "FROM cities c " +
+                    "INNER JOIN countries co ON co.id=c.country_id " +
+                    "WHERE c.country_id=?");
+            statement.setLong(1, id);
+            ResultSet resultSet = statement.executeQuery();
+
+            while (resultSet.next()){
+                cities.add(new Cities(
+                        resultSet.getLong("id"),
+                        resultSet.getString("name"),
+                        new Countries(
+                                resultSet.getLong("country_id"),
+                                resultSet.getString("countryName"),
+                                resultSet.getString("code")
+                        )
+                ));
+            }
+            statement.close();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return cities;
+    }
+
+
+    public static Cities getCityById(Long id){
+        Cities city = null;
+
+        try{
+            PreparedStatement statement = connection.prepareStatement("" +
+                    "SELECT c.id, c.name, c.country_id, co.name AS countryName, co.code " +
+                    "FROM cities c " +
+                    "INNER JOIN countries co ON co.id=c.country_id " +
+                    "WHERE c.id=?");
+            statement.setLong(1, id);
+            ResultSet resultSet = statement.executeQuery();
+
+            while (resultSet.next()){
+                city = new Cities(
+                        resultSet.getLong("id"),
+                        resultSet.getString("name"),
+                        new Countries(
+                                resultSet.getLong("country_id"),
+                                resultSet.getString("countryName"),
+                                resultSet.getString("code")
+                        )
+                );
+            }
+            statement.close();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return city;
+    }
+
 }
