@@ -14,7 +14,7 @@ public class DBManager {
     static {
         try{
             Class.forName("com.mysql.cj.jdbc.Driver");
-            connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/java_lesson7?serverTimezone=UTC&useUnicode=true", "root", "");
+            connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/javaee_lesson7?serverTimezone=UTC&useUnicode=true", "root", "");
         }catch(Exception e){
             e.printStackTrace();
         }
@@ -362,6 +362,46 @@ public class DBManager {
             e.printStackTrace();
         }
         return city;
+    }
+
+    public static ArrayList<Hotels> searchHotels(String name, int priceFrom, int priceTo, int starsFrom, int starsTo){
+        ArrayList<Hotels> hotels = new ArrayList<>();
+
+        try {
+            // String nameCriteria = "";
+            String sqlQuery = "SELECT h.id, h.name, h.description, h.added_date, h.price, h.stars, h.author_id, u.full_name, u.picture " +
+                    "FROM hotels h " +
+                    "INNER JOIN users u ON u.id=h.author_id " +
+                    "WHERE h.name LIKE ? " +
+                    "ORDER BY h.price ASC ";
+
+            PreparedStatement statement = connection.prepareStatement(sqlQuery);
+            statement.setString(1, "%"+name+"%");
+            ResultSet resultSet = statement.executeQuery();
+
+            while (resultSet.next()){
+                hotels.add(new Hotels(
+                        resultSet.getLong("id"),
+                        resultSet.getString("name"),
+                        new Users(
+                                resultSet.getLong("author_id"),
+                                null, null,
+                                resultSet.getString("full_name"),
+                                resultSet.getString("picture"),
+                                null
+                        ),
+                        resultSet.getString("description"),
+                        resultSet.getInt("stars"),
+                        resultSet.getInt("price"),
+                        resultSet.getTimestamp("added_date")
+                ));
+            }
+            statement.close();
+
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return hotels;
     }
 
 }

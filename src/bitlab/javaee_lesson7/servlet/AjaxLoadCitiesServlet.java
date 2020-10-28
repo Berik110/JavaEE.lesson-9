@@ -2,6 +2,7 @@ package bitlab.javaee_lesson7.servlet;
 
 import bitlab.javaee_lesson7.db.Cities;
 import bitlab.javaee_lesson7.db.DBManager;
+import com.google.gson.Gson;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -31,5 +32,16 @@ public class AjaxLoadCitiesServlet extends HttpServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
+        Long id = Long.parseLong(request.getParameter("country_id"));
+
+        response.setContentType("text/html");
+        PrintWriter out = response.getWriter();
+
+        ArrayList<Cities> cities = DBManager.getCitiesByCountryId(id);
+
+        if (cities!=null){
+            Gson gson = new Gson();
+            out.print(gson.toJson(cities));
+        }
     }
 }

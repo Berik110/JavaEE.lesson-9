@@ -1,14 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
-    <data-source source="LOCAL" name="java_lesson7@localhost" uuid="55ecea92-3d9a-41b0-92b2-015d0c8c66be">
-      <driver-ref>mysql.8</driver-ref>
+    <data-source source="LOCAL" name="javaee_lesson7@localhost" uuid="96b4bbcb-62ce-47ee-9385-c0a68751206b">
+      <driver-ref>mariadb</driver-ref>
       <synchronize>true</synchronize>
-      <jdbc-driver>com.mysql.cj.jdbc.Driver</jdbc-driver>
-      <jdbc-url>jdbc:mysql://localhost:3306/java_lesson7?serverTimezone=UTC&amp;useUnicode=true</jdbc-url>
-      <jdbc-additional-properties>
-        <property name="APPROVED_DRIVER" value="mysql.8" />
-      </jdbc-additional-properties>
+      <jdbc-driver>org.mariadb.jdbc.Driver</jdbc-driver>
+      <jdbc-url>jdbc:mariadb://localhost:3306/javaee_lesson7</jdbc-url>
     </data-source>
   </component>
 </project>

@@ -128,10 +128,16 @@
     $(document).ready(function (){
         $("#country_id").change(function(){
             cntId=$("#country_id").val();
-            $.post("/ajaxcities", {
+            $.get("/ajaxcities", {
                 country_id : cntId
             }, function (data){
-                $("#city_id").html(data); // document.getElementBiId("city_id).innerHTML
+                //$("#city_id").html(data); // document.getElementBiId("city_id).innerHTML
+                citiesArray = JSON.parse(data);
+                opts = "";
+                for (i=0; i<citiesArray.length; i++){
+                    opts+="<option value='"+citiesArray[i]["id"]+"'>"+citiesArray[i]["name"]+"</option>"
+                }
+                $("#city_id").html(opts);
             });
         });
     });
