@@ -27,6 +27,48 @@
     </nav>
 </div>
 <div class="container mt-3">
+    <form action="/search" method="get">
+        <div class="row">
+            <div class="col-sm-2">
+                <label>NAME:</label>
+            </div>
+            <div class="col-sm-2">
+                <label>Price from:</label>
+            </div>
+            <div class="col-sm-2">
+                <label>Price to:</label>
+            </div>
+            <div class="col-sm-2">
+                <label>Stars from:</label>
+            </div>
+            <div class="col-sm-2">
+                <label>Stars to:</label>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-sm-2">
+                <input type="text" class="form-control form-control-sm" name="key" value="<%=key%>">
+            </div>
+            <div class="col-sm-2">
+                <input type="number" class="form-control form-control-sm" name="price_from" value="<%=priceFrom%>">
+            </div>
+            <div class="col-sm-2">
+                <input type="number" class="form-control form-control-sm" name="price_to" value="<%=priceTo%>">
+            </div>
+            <div class="col-sm-2">
+                <input type="number" class="form-control form-control-sm" name="stars_from" value="<%=starsFrom%>">
+            </div>
+            <div class="col-sm-2">
+                <input type="number" class="form-control form-control-sm" name="stars_to" value="<%=starsTo%>">
+            </div>
+            <div class="col-sm-2">
+                <button class="btn btn-primary btn-sm btn-block">FILTER</button>
+            </div>
+        </div>
+    </form>
+</div>
+<div class="container mt-3">
     <div class="row">
         <div class="col-sm-12">
             <%

@@ -40,8 +40,34 @@
                 }
             %>
         </ul>
+        <%
+            String key = "";
+            if (request.getParameter("key")!=null){
+                key = request.getParameter("key");
+            }
+
+            String priceFrom = "";
+            if (request.getParameter("price_from")!=null){
+                priceFrom = request.getParameter("price_from");
+            }
+
+            String priceTo = "";
+            if (request.getParameter("price_to")!=null){
+                priceTo = request.getParameter("price_to");
+            }
+
+            String starsFrom = "";
+            if (request.getParameter("stars_from")!=null){
+                starsFrom = request.getParameter("stars_from");
+            }
+
+            String starsTo = "";
+            if (request.getParameter("stars_to")!=null){
+                starsTo = request.getParameter("stars_to");
+            }
+        %>
         <form class="form-inline my-2 my-lg-0" action="/search" method="get">
-            <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" name="key">
+            <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" name="key" value="<%=key%>">
             <button class="btn btn-outline-success my-2 my-sm-0">Search</button>
         </form>
     </div>

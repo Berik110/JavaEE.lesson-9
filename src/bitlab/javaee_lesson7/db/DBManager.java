@@ -368,11 +368,31 @@ public class DBManager {
         ArrayList<Hotels> hotels = new ArrayList<>();
 
         try {
-            // String nameCriteria = "";
+
+            String priceFromQuery = "";
+            String priceToQuery = "";
+
+            String starsFromQuery = "";
+            String starsToQuery = "";
+
+            if (priceFrom>=0){
+                priceFromQuery = " AND h.price >= " + priceFrom;
+            }
+            if (priceTo>=0){
+                priceToQuery = " AND h.price <= " + priceTo;
+            }
+
+            if (starsFrom>=0){
+                starsFromQuery = " AND h.price >= " + starsFrom;
+            }
+            if (starsTo>=0){
+                starsToQuery = " AND h.price <= " + starsTo;
+            }
+
             String sqlQuery = "SELECT h.id, h.name, h.description, h.added_date, h.price, h.stars, h.author_id, u.full_name, u.picture " +
                     "FROM hotels h " +
                     "INNER JOIN users u ON u.id=h.author_id " +
-                    "WHERE h.name LIKE ? " +
+                    "WHERE h.name LIKE ? " + priceFromQuery + priceToQuery + starsFromQuery + starsToQuery + " " +
                     "ORDER BY h.price ASC ";
 
             PreparedStatement statement = connection.prepareStatement(sqlQuery);

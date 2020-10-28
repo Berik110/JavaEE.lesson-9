@@ -20,7 +20,46 @@ public class SearchServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
         String key = request.getParameter("key");
-        ArrayList<Hotels> hotels = DBManager.searchHotels("key",0,0,0,0);
+        int priceFrom = -1;
+        int priceTo=-1;
+
+        int starsFrom = -1;
+        int starsTo=-1;
+
+        try{
+            String priceFromText = request.getParameter("price_from");
+            priceFrom = Integer.parseInt(priceFromText);
+
+        }catch (Exception e){
+
+        }
+
+
+        try{
+            String priceToText = request.getParameter("price_to");
+            priceTo = Integer.parseInt(priceToText);
+
+        }catch (Exception e){
+
+        }
+
+        try{
+            String starsFromText = request.getParameter("stars_from");
+            starsFrom = Integer.parseInt(starsFromText);
+
+        }catch (Exception e){
+
+        }
+
+        try{
+            String starsToText = request.getParameter("stars_to");
+            starsTo = Integer.parseInt(starsToText);
+
+        }catch (Exception e){
+
+        }
+
+        ArrayList<Hotels> hotels = DBManager.searchHotels("key", priceFrom, priceTo, starsFrom, starsTo);
 
         request.setAttribute("hotels", hotels);
         request.getRequestDispatcher("/search.jsp").forward(request,response);
